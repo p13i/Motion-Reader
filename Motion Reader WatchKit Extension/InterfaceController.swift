@@ -12,6 +12,16 @@ import Foundation
 
 class InterfaceController: WKInterfaceController {
 
+    // Accelerometer labels
+    @IBOutlet var accelerometerXLabel: WKInterfaceLabel!
+    @IBOutlet var accelerometerYLabel: WKInterfaceLabel!
+    @IBOutlet var accelerometerZLabel: WKInterfaceLabel!
+    
+    // Gyroscope labels
+    @IBOutlet var gyroscopeXLabel: WKInterfaceLabel!
+    @IBOutlet var gyroscopeYLabel: WKInterfaceLabel!
+    @IBOutlet var gyroscopeZLabel: WKInterfaceLabel!
+    
     override func awake(withContext context: Any?) {
         super.awake(withContext: context)
         

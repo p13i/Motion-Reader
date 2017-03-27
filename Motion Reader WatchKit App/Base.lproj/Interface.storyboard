@@ -28,6 +28,14 @@
                         <label alignment="left" text="Gyroscope Y" id="SjV-WH-2Mt"/>
                         <label alignment="left" text="Gyroscope Z" id="26L-lF-IIw"/>
                     </items>
+                    <connections>
+                        <outlet property="accelerometerXLabel" destination="p9G-zW-oJt" id="53f-vM-ZUC"/>
+                        <outlet property="accelerometerYLabel" destination="PzT-zp-oDU" id="RZX-2r-zbh"/>
+                        <outlet property="accelerometerZLabel" destination="wPl-nT-NMe" id="FQR-QF-N7C"/>
+                        <outlet property="gyroscopeXLabel" destination="qfH-aL-0TA" id="3cy-fi-UnE"/>
+                        <outlet property="gyroscopeYLabel" destination="SjV-WH-2Mt" id="QZ1-o7-z8H"/>
+                        <outlet property="gyroscopeZLabel" destination="26L-lF-IIw" id="TbK-f6-nuA"/>
+                    </connections>
                 </controller>
             </objects>
         </scene>
