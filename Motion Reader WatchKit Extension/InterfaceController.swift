@@ -30,6 +30,14 @@ class InterfaceController: WKInterfaceController {
     // CoreMotion motion manager
     let motionManger = CMMotionManager()
     
+    /**
+        Sets the given WKInterfaceLabel to the given numerical value. If `datum` is less than `0`, then the label will show up with in a gray color. Otherwise, the label will be white. Positive values of `datum` will be prefixed with `+`.
+     
+        - parameter label: The WKInterfaceLabel in the Apple Watch interface to set the value for.
+     
+        - parameter datum: The value to set the `label` to.
+
+    */
     func setLabel(label: WKInterfaceLabel, datum: Double) -> Void {
         var datumToWriteToLabel: Double;
         var labelFormat: String;
@@ -54,23 +62,20 @@ class InterfaceController: WKInterfaceController {
     // MARK: WKInterfaceController
     
     
-    override func awake(withContext context: Any?) {
-        super.awake(withContext: context)
-        
-        // Configure interface objects here.
-    }
-    
     override func willActivate() {
         // This method is called when watch view controller is about to be visible to user
         super.willActivate()
         
+        // This the interval in which we are provided motion updates
         motionManger.deviceMotionUpdateInterval = 0.1
         motionManger.startDeviceMotionUpdates(to: OperationQueue.main) { (motionUpdate: CMDeviceMotion?, error: Error?) in
+            // Set the accelerometer labels
             let gravityData: CMAcceleration = motionUpdate!.gravity
             self.setLabel(label: self.accelerometerXLabel, datum: gravityData.x)
             self.setLabel(label: self.accelerometerYLabel, datum: gravityData.y)
             self.setLabel(label: self.accelerometerZLabel, datum: gravityData.z)
             
+            // Set the gyroscope labels
             let gyroscopeData: CMAttitude = motionUpdate!.attitude
             self.setLabel(label: self.gyroscopeYawLabel, datum: gyroscopeData.yaw)
             self.setLabel(label: self.gyroscopePitchLabel, datum: gyroscopeData.pitch)
@@ -81,6 +86,9 @@ class InterfaceController: WKInterfaceController {
     override func didDeactivate() {
         // This method is called when watch view controller is no longer visible
         super.didDeactivate()
+        
+        // Be sure to stop updates after the view is gone
+        motionManger.stopDeviceMotionUpdates()
     }
 
 }
