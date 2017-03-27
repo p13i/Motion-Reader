@@ -23,9 +23,9 @@ class InterfaceController: WKInterfaceController {
     @IBOutlet var accelerometerZLabel: WKInterfaceLabel!
     
     // Gyroscope labels
-    @IBOutlet var gyroscopeXLabel: WKInterfaceLabel!
-    @IBOutlet var gyroscopeYLabel: WKInterfaceLabel!
-    @IBOutlet var gyroscopeZLabel: WKInterfaceLabel!
+    @IBOutlet var gyroscopeYawLabel: WKInterfaceLabel!
+    @IBOutlet var gyroscopePitchLabel: WKInterfaceLabel!
+    @IBOutlet var gyroscopeRollLabel: WKInterfaceLabel!
     
     // CoreMotion motion manager
     let motionManger = CMMotionManager()
