@@ -72,9 +72,9 @@ class InterfaceController: WKInterfaceController {
             self.setLabel(label: self.accelerometerZLabel, datum: gravityData.z)
             
             let gyroscopeData: CMAttitude = motionUpdate!.attitude
-            self.setLabel(label: self.accelerometerXLabel, datum: gyroscopeData.yaw)
-            self.setLabel(label: self.accelerometerYLabel, datum: gyroscopeData.pitch)
-            self.setLabel(label: self.accelerometerZLabel, datum: gyroscopeData.roll)
+            self.setLabel(label: self.gyroscopeYawLabel, datum: gyroscopeData.yaw)
+            self.setLabel(label: self.gyroscopePitchLabel, datum: gyroscopeData.pitch)
+            self.setLabel(label: self.gyroscopeRollLabel, datum: gyroscopeData.roll)
         }
     }
     
