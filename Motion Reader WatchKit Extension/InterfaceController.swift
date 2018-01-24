@@ -9,10 +9,17 @@
 import WatchKit
 import Foundation
 import CoreMotion
+import WatchConnectivity
 
 
 class InterfaceController: WKInterfaceController {
 
+    @IBAction func transmitButtonPressed() {
+        let message = ["Hello": "World"]
+        self.wcSession!.sendMessage(message, replyHandler: nil, errorHandler: nil)
+    }
+    
+    var wcSession: WCSession?
     
     // MARK: CoreMotion
     
@@ -67,13 +74,19 @@ class InterfaceController: WKInterfaceController {
         super.willActivate()
         
         // This the interval in which we are provided motion updates
-        motionManger.deviceMotionUpdateInterval = 0.1
+        motionManger.deviceMotionUpdateInterval = 1.0
         motionManger.startDeviceMotionUpdates(to: OperationQueue.main) { (motionUpdate: CMDeviceMotion?, error: Error?) in
+            
             // Set the accelerometer labels
             let gravityData: CMAcceleration = motionUpdate!.gravity
             self.setLabel(label: self.accelerometerXLabel, datum: gravityData.x)
             self.setLabel(label: self.accelerometerYLabel, datum: gravityData.y)
             self.setLabel(label: self.accelerometerZLabel, datum: gravityData.z)
+            
+            // Send acceleration to iOS device
+            let accelerationInstance = AccelerometerInstant(gravityData)
+            let instanceJson: Data = JSON.encode(accelerationInstance)!
+            self.wcSession!.sendMessageData(instanceJson, replyHandler: nil, errorHandler: nil)
             
             // Set the gyroscope labels
             let gyroscopeData: CMAttitude = motionUpdate!.attitude
@@ -81,6 +94,10 @@ class InterfaceController: WKInterfaceController {
             self.setLabel(label: self.gyroscopePitchLabel, datum: gyroscopeData.pitch)
             self.setLabel(label: self.gyroscopeRollLabel, datum: gyroscopeData.roll)
         }
+        
+        wcSession = WCSession.default()
+        wcSession!.delegate = self
+        wcSession?.activate()
     }
     
     override func didDeactivate() {
@@ -89,6 +106,13 @@ class InterfaceController: WKInterfaceController {
         
         // Be sure to stop updates after the view is gone
         motionManger.stopDeviceMotionUpdates()
+        wcSession = nil
     }
 
+}
+
+extension InterfaceController: WCSessionDelegate {
+    func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?) {
+        
+    }
 }
