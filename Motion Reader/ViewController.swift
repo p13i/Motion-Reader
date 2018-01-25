@@ -10,11 +10,14 @@ import UIKit
 import WatchConnectivity
 
 class ViewController: UIViewController {
-
-    @IBOutlet weak var messageLabel: UILabel!
+    
+    @IBOutlet weak var accelerometerDataTableView: UITableView!
+    
+    @IBOutlet weak var accelerometerInstancesCountLabel: UILabel!
     
     var wcSession: WCSession?
-    var receiveCount: Int = 0
+    
+    var accelerometerInstances: [AccelerometerInstant] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,6 +26,9 @@ class ViewController: UIViewController {
         wcSession = WCSession.default()
         wcSession!.delegate = self
         wcSession!.activate()
+        
+        accelerometerDataTableView.delegate = self
+        accelerometerDataTableView.dataSource = self
     }
 
     override func didReceiveMemoryWarning() {
@@ -48,7 +54,33 @@ extension ViewController: WCSessionDelegate {
     }
     
     func session(_ session: WCSession, didReceiveMessageData messageData: Data) {
-        self.receiveCount += 1
-        self.messageLabel.text = String(self.receiveCount)
+        let accelerometerInstance = JSON.decode(messageData, into: AccelerometerInstant.self)!
+        self.accelerometerInstances.append(accelerometerInstance)
+        
+        let newIndexPath = IndexPath(row: self.accelerometerInstances.count - 1, section: 0)
+        self.accelerometerDataTableView.insertRows(at: [newIndexPath], with: .fade)
+        
+        self.accelerometerInstancesCountLabel.text = String(self.accelerometerInstances.count)
     }
+}
+
+extension ViewController: UITableViewDelegate, UITableViewDataSource
+{
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return self.accelerometerInstances.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = self.accelerometerDataTableView.dequeueReusableCell(withIdentifier: "AccelerometerInstantTableViewCell") as! AccelerometerInstantTableViewCell
+        
+        let instance = accelerometerInstances[indexPath.row]
+        cell.timestampLabel.text = instance.timestamp.formatted(as: "hh:mm:ss")
+        cell.accelerometerXLabel.text = instance.x.formatted(as: "%.2f")
+        cell.accelerometerYLabel.text = instance.y.formatted(as: "%.2f")
+        cell.accelerometerZLabel.text = instance.z.formatted(as: "%.2f")
+        
+        return cell
+    }
+    
+    
 }

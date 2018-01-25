@@ -74,7 +74,7 @@ class InterfaceController: WKInterfaceController {
         super.willActivate()
         
         // This the interval in which we are provided motion updates
-        motionManger.deviceMotionUpdateInterval = 1.0
+        motionManger.deviceMotionUpdateInterval = 0.25
         motionManger.startDeviceMotionUpdates(to: OperationQueue.main) { (motionUpdate: CMDeviceMotion?, error: Error?) in
             
             // Set the accelerometer labels
@@ -87,12 +87,6 @@ class InterfaceController: WKInterfaceController {
             let accelerationInstance = AccelerometerInstant(gravityData)
             let instanceJson: Data = JSON.encode(accelerationInstance)!
             self.wcSession!.sendMessageData(instanceJson, replyHandler: nil, errorHandler: nil)
-            
-            // Set the gyroscope labels
-            let gyroscopeData: CMAttitude = motionUpdate!.attitude
-            self.setLabel(label: self.gyroscopeYawLabel, datum: gyroscopeData.yaw)
-            self.setLabel(label: self.gyroscopePitchLabel, datum: gyroscopeData.pitch)
-            self.setLabel(label: self.gyroscopeRollLabel, datum: gyroscopeData.roll)
         }
         
         wcSession = WCSession.default()

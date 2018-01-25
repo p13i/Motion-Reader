@@ -14,11 +14,6 @@
             <objects>
                 <controller id="AgC-eL-Hgc" customClass="InterfaceController" customModule="Motion_Reader_WatchKit_App" customModuleProvider="target">
                     <items>
-                        <button width="1" alignment="left" title="Transmit" id="tC7-o9-OOi">
-                            <connections>
-                                <action selector="transmitButtonPressed" destination="AgC-eL-Hgc" id="RXO-7G-Sys"/>
-                            </connections>
-                        </button>
                         <label alignment="left" text="Accelerometer" id="gpz-Fb-uMa">
                             <color key="textColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                         </label>
